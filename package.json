@@ -1,0 +1,75 @@
+{
+  "name": "bookish-cli",
+  "description": "Look up book identifiers",
+  "version": "0.0.0",
+  "author": "Tom MacWright",
+  "bin": {
+    "bookish": "./bin/run.js"
+  },
+  "bugs": "https://github.com/tmcw/bookish-cli/issues",
+  "dependencies": {
+    "@oclif/core": "^3",
+    "@oclif/plugin-help": "^6",
+    "@oclif/plugin-plugins": "^5",
+    "@types/cheerio": "^0.22.35",
+    "cheerio": "1.0.0-rc.12"
+  },
+  "devDependencies": {
+    "@oclif/prettier-config": "^0.2.1",
+    "@oclif/test": "^3",
+    "@types/chai": "^4",
+    "@types/mocha": "^10",
+    "@types/node": "^18",
+    "chai": "^4",
+    "eslint": "^8",
+    "eslint-config-oclif": "^5",
+    "eslint-config-oclif-typescript": "^3",
+    "eslint-config-prettier": "^9",
+    "mocha": "^10",
+    "oclif": "^4",
+    "shx": "^0.3.3",
+    "ts-node": "^10",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "/bin",
+    "/dist",
+    "/oclif.manifest.json"
+  ],
+  "homepage": "https://github.com/tmcw/bookish-cli",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "dist/index.js",
+  "type": "module",
+  "oclif": {
+    "bin": "bookish",
+    "dirname": "bookish",
+    "commands": "./dist/commands",
+    "plugins": [
+      "@oclif/plugin-help",
+      "@oclif/plugin-plugins"
+    ],
+    "topicSeparator": " ",
+    "topics": {
+      "hello": {
+        "description": "Say hello to the world and others"
+      }
+    }
+  },
+  "repository": "tmcw/bookish-cli",
+  "scripts": {
+    "build": "shx rm -rf dist && tsc -b",
+    "lint": "eslint . --ext .ts",
+    "postpack": "shx rm -f oclif.manifest.json",
+    "posttest": "pnpm run lint",
+    "prepack": "oclif manifest && oclif readme",
+    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif readme && git add README.md"
+  },
+  "types": "dist/index.d.ts"
+}
