@@ -1,4 +1,4 @@
-import {IdType} from './types.js'
+import {Id, Ids} from './types.js'
 
 /**
  * Guess the type of a book identifier
@@ -21,20 +21,20 @@ import {IdType} from './types.js'
  * @param id The book identifier
  * @returns an id
  */
-export function guess(id: string): IdType | null {
+export function guess(id: string): Id | null {
   // Dead-giveaway prefixes
-  if (id.startsWith('OL')) return IdType.OLID
+  if (id.startsWith('OL')) return new Ids.OLID(id)
 
   const numbersOnly = id.replaceAll(/\D/g, '')
 
   if (numbersOnly.length === 12) {
     // Confirm Library of Congress format
-    return IdType.LCCN
+    return new Ids.LCCN(id)
   }
 
   if (numbersOnly.length === 13) {
     // Confirm ISBN check digit
-    return IdType.ISBN
+    return new Ids.ISBN13(id)
   }
 
   if (numbersOnly.length === 10) {
@@ -46,7 +46,7 @@ export function guess(id: string): IdType | null {
     }
 
     if (s % 11 === 0) {
-      return IdType.ISBN
+      return new Ids.ISBN10(id)
     }
   }
 

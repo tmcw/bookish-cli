@@ -1,9 +1,7 @@
 import {Args, Command, Flags} from '@oclif/core'
+import {dump} from 'js-yaml'
 
-import {isbnToGoodreads} from '../../lib/goodreads.js'
 import {guess} from '../../lib/guess.js'
-import {isbnToOpenlibrary} from '../../lib/openlibrary.js'
-import {IdType} from '../../lib/types.js'
 
 export default class Lookup extends Command {
   static args = {
@@ -27,13 +25,17 @@ hello friend from oclif! (./src/commands/hello/index.ts)
 
     const type = guess(args.id)
 
-    if (type === IdType.ISBN) {
-      this.log(`isbn: ${args.id}`)
-      const goodreads = await isbnToGoodreads(args.id)
-      this.log(`goodreads: ${goodreads}`)
-
-      const ol = await isbnToOpenlibrary(args.id)
-      this.log(`olid: ${ol?.openlibrary}`)
+    if (!type) {
+      this.logToStderr('ID could not be automatically recognized')
+      return this.exit(1)
     }
+
+    this.logToStderr(`Detected type ${type.yaml()}`)
+
+    const types = await type.lookup()
+
+    const object = Object.fromEntries(types.map((t) => t.yaml()))
+
+    this.log(dump(object))
   }
 }
